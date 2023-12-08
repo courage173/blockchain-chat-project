@@ -1,15 +1,16 @@
-import "./polyfills";
-import "./index.css";
-import "@animxyz/core";
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import ClientProvider from "./contexts/ClientContext.tsx";
-import { createHashRouter, RouterProvider } from "react-router-dom";
-import { findConversation } from "./model/conversations";
-import ConversationViewWithLoader from "./views/ConversationViewWithLoader.tsx";
-import NewConversationView from "./views/NewConversationView.tsx";
-import WalletContext from "./contexts/WalletContext.tsx";
+import './polyfills';
+import './index.css';
+import '@animxyz/core';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import ClientProvider from './contexts/ClientContext.tsx';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
+import { findConversation } from './model/conversations';
+import ConversationViewWithLoader from './views/ConversationViewWithLoader.tsx';
+import NewConversationView from './views/NewConversationView.tsx';
+import WalletContext from './contexts/WalletContext.tsx';
+import { ToasterProvider } from './providers/toast-provider.tsx';
 
 async function conversationLoader({ params }: any) {
   const conversation = await findConversation(params.conversationTopic);
@@ -18,26 +19,28 @@ async function conversationLoader({ params }: any) {
 
 const router = createHashRouter([
   {
-    path: "*",
+    path: '*',
     element: <App />,
   },
   {
-    path: "c/:conversationTopic",
+    path: 'c/:conversationTopic',
     element: <ConversationViewWithLoader />,
     loader: conversationLoader,
   },
   {
-    path: "new",
+    path: 'new',
     element: <NewConversationView />,
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ClientProvider>
-      <WalletContext>
-        <RouterProvider router={router} />
-      </WalletContext>
-    </ClientProvider>
+    <ToasterProvider>
+      <ClientProvider>
+        <WalletContext>
+          <RouterProvider router={router} />
+        </WalletContext>
+      </ClientProvider>
+    </ToasterProvider>
   </React.StrictMode>
 );
