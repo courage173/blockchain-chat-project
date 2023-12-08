@@ -1,18 +1,21 @@
-import { Client } from "@xmtp/xmtp-js";
-import { Wallet } from "ethers";
-import { createContext, useState, ReactElement, useEffect } from "react";
+import { Client } from '@xmtp/xmtp-js';
+import { Wallet } from 'ethers';
+import { createContext, useState, ReactElement, useEffect } from 'react';
 import {
   AttachmentCodec,
   RemoteAttachmentCodec,
-} from "@xmtp/content-type-remote-attachment";
-import { ReplyCodec } from "@xmtp/content-type-reply";
-import { ReactionCodec } from "@xmtp/content-type-reaction";
-import { ReadReceiptCodec } from "@xmtp/content-type-read-receipt";
+} from '@xmtp/content-type-remote-attachment';
+import { ReplyCodec } from '@xmtp/content-type-reply';
+import { ReactionCodec } from '@xmtp/content-type-reaction';
+import { ReadReceiptCodec } from '@xmtp/content-type-read-receipt';
+import { decryptData } from '../util/enc-dec-user';
 
 type ClientContextValue = {
   client: Client | null;
   setClient: (client: Client | null) => void;
 };
+
+const NAME_LOC = import.meta.env.VITE_APP_LOCNAME as string;
 
 export const ClientContext = createContext<ClientContextValue>({
   client: null,
@@ -27,30 +30,36 @@ export default function ClientProvider({
   children: ReactElement;
 }): ReactElement {
   const [client, setClient] = useState<Client | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const insecurePrivateKey = localStorage.getItem("_insecurePrivateKey");
+      const decData = await decryptData(NAME_LOC);
 
-      if (!insecurePrivateKey) {
-        setIsLoading(false);
+      // const insecurePrivateKey = localStorage.getItem('_insecurePrivateKey');
+
+      if (!decData) {
+        // setIsLoading(false);
+
         return;
       }
 
-      const wallet = new Wallet(insecurePrivateKey);
-      const client = await Client.create(wallet, {
-        env: "dev",
-      });
+      try {
+        const wallet = new Wallet(decData);
+        const client = await Client.create(wallet, {
+          env: 'dev',
+        });
 
-      client.registerCodec(new AttachmentCodec());
-      client.registerCodec(new RemoteAttachmentCodec());
-      client.registerCodec(new ReplyCodec());
-      client.registerCodec(new ReactionCodec());
-      client.registerCodec(new ReadReceiptCodec());
+        client.registerCodec(new AttachmentCodec());
+        client.registerCodec(new RemoteAttachmentCodec());
+        client.registerCodec(new ReplyCodec());
+        client.registerCodec(new ReactionCodec());
+        client.registerCodec(new ReadReceiptCodec());
 
-      setClient(client);
-      setIsLoading(false);
+        setClient(client);
+      } catch (error: any) {
+        console.log('error', error.message);
+      }
     })();
   }, []);
 
@@ -61,11 +70,13 @@ export default function ClientProvider({
 
   return (
     <ClientContext.Provider value={clientContextValue}>
-      {isLoading ? (
-        <div className="w-full p-4 m-auto">Loading client....</div>
+      {/* {isLoading ? (
+        <div className='w-full p-4 m-auto'>Loading client....</div>
       ) : (
         children
-      )}
+      )} */}
+
+      {children}
     </ClientContext.Provider>
   );
 }
