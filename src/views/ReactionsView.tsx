@@ -1,14 +1,14 @@
-import { ReactElement, useState } from "react";
-import { Message, MessageReaction } from "../model/db";
-import { useReactions } from "../hooks/useReactions";
-import { addReaction, removeReaction } from "../model/reactions";
-import { useClient } from "../hooks/useClient";
-import classNames from "classnames";
+import { ReactElement, useState } from 'react';
+import { Message, MessageReaction } from '../model/db';
+import { useReactions } from '../hooks/useReactions';
+import { addReaction, removeReaction } from '../model/reactions';
+import { useClient } from '../hooks/useClient';
+import classNames from 'classnames';
 
 const defaultReactions = {
-  thumbsup: "👍",
-  thumbsdown: "👎",
-  tada: "🎉",
+  thumbsup: '👍',
+  thumbsdown: '👎',
+  tada: '🎉',
 } as const;
 
 type ReactionString = keyof typeof defaultReactions;
@@ -48,9 +48,9 @@ function ReactionView({
     <button
       onClick={onClick}
       className={classNames(
-        "py-0.5 px-2 border rounded text-xs text-zinc-500",
+        'py-0.5 px-2 border rounded text-xs text-zinc-500',
         {
-          "bg-yellow-200": currentUserReacted,
+          'bg-yellow-200': currentUserReacted,
         }
       )}
     >
@@ -82,7 +82,7 @@ export default function ReactionsView({
     reactions.length === Object.keys(defaultReactions).length;
 
   return (
-    <div className="flex space-x-2">
+    <div className='flex space-x-2'>
       {(Object.keys(reactionsByName) as ReactionString[]).map<ReactElement>(
         (name) => {
           return (
@@ -90,7 +90,7 @@ export default function ReactionsView({
               key={name}
               name={name}
               reactions={reactionsByName[name] ?? []}
-              clientAddress={client?.address ?? ""}
+              clientAddress={client?.address ?? ''}
               onAdd={() => {
                 addReaction(name, message, client);
                 setIsReacting(false);
@@ -106,7 +106,7 @@ export default function ReactionsView({
 
       {!isFullyReacted ? (
         isReacting ? (
-          <div className="space-x-2">
+          <div className='space-x-2 '>
             {(Object.entries(defaultReactions) as ReactionEntries)
               .map(([name, emoji]) => {
                 if (reactionsByName[name]) {
@@ -116,7 +116,7 @@ export default function ReactionsView({
                   <button
                     onClick={() => addReaction(name, message, client)}
                     key={name}
-                    className="py-0.5 px-2 border rounded text-xs text-zinc-500"
+                    className='py-0.5 px-1 border rounded text-xs text-zinc-500'
                   >
                     {emoji}
                   </button>
@@ -125,7 +125,7 @@ export default function ReactionsView({
               .filter(Boolean)}
 
             <button
-              className="text-xs text-zinc-500"
+              className='text-xs text-zinc-500 '
               onClick={() => setIsReacting(false)}
             >
               cancel
@@ -133,7 +133,7 @@ export default function ReactionsView({
           </div>
         ) : (
           <button
-            className="text-xs text-blue-600"
+            className='text-xs text-blue-600 py-[5px] pl-2'
             onClick={() => setIsReacting((prev) => !prev)}
           >
             React

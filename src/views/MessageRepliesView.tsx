@@ -1,9 +1,9 @@
-import { ReactElement, useState } from "react";
-import { Message } from "../model/db";
-import { useReplies } from "../hooks/useReplies";
-import ReplyComposer from "./ReplyComposer";
-import { MessageContent } from "./MessageCellView";
-import { shortAddress } from "../util/shortAddress";
+import { ReactElement, useState } from 'react';
+import { Message } from '../model/db';
+import { useReplies } from '../hooks/useReplies';
+import ReplyComposer from './ReplyComposer';
+import { MessageContent } from './MessageCellView';
+import { shortAddress } from '../util/shortAddress';
 
 export default function MessageRepliesView({
   message,
@@ -15,11 +15,11 @@ export default function MessageRepliesView({
   const [isShowingReplies, setIsShowingReplies] = useState(false);
 
   return isShowingReplies ? (
-    <div className="py-2">
+    <div className=''>
       {replies.length > 0 && (
-        <div className="mb-2">
+        <div>
           {replies.map((message) => (
-            <div className="flex text-xs space-x-1" key={message.xmtpID}>
+            <div className='flex text-xs ' key={message.xmtpID}>
               <span>{shortAddress(message.senderAddress)}:</span>
               <MessageContent message={message} />
             </div>
@@ -33,15 +33,13 @@ export default function MessageRepliesView({
       />
     </div>
   ) : (
-    <div>
-      <button
-        className="text-blue-600 text-xs"
-        onClick={() => setIsShowingReplies(true)}
-      >
-        {replies.length == 0
-          ? "Reply"
-          : `${replies.length} repl${replies.length == 1 ? "y" : "ies"}`}
-      </button>
-    </div>
+    <button
+      className='text-blue-600 text-xs )'
+      onClick={() => setIsShowingReplies(true)}
+    >
+      {replies.length == 0
+        ? 'Reply'
+        : `${replies.length} repl${replies.length == 1 ? 'y' : 'ies'}`}
+    </button>
   );
 }

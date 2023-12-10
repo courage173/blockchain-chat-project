@@ -22,16 +22,16 @@ export default function ConversationListView(): ReactElement {
   }, [readReceiptsEnabled]);
 
   return (
-    <div className='flex items-center space-x-4 content-center flex-col m-auto'>
+    <div className='flex flex-col '>
       <button
         onClick={() => setReadReceiptsEnabled(!readReceiptsEnabled)}
-        className='bg-purple-500 shadow-md p-2 my-1 text-white rounded-lg w-full flex justify-center tracking-wider'
+        className='bg-blue-500 shadow-md p-2 my-1 text-white rounded-lg tracking-wider'
         id={`read-receipt-${readReceiptsEnabled}`}
       >
         {readReceiptsEnabled ? 'Disable read receipts' : 'Enable read receipts'}
       </button>
       {conversations?.length == 0 && (
-        <p className='text-white'>No conversations yet.</p>
+        <p className='text-black text-center'>No conversations yet.</p>
       )}
       {conversations
         ? conversations.map((conversation, i) => (

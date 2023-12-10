@@ -1,7 +1,7 @@
 export default function LoadingSVG() {
   return (
     <svg
-      className='animate-spin h-5 w-5 mr-3'
+      className='animate-spin h-5 w-5 mr-3 text-white'
       viewBox='0 0 256 256'
       xmlns='http://www.w3.org/2000/svg'
     >

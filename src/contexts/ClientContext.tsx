@@ -34,13 +34,12 @@ export default function ClientProvider({
 
   useEffect(() => {
     (async () => {
-      const decData = await decryptData(NAME_LOC);
+      const decData: string = await decryptData(NAME_LOC);
 
       // const insecurePrivateKey = localStorage.getItem('_insecurePrivateKey');
 
       if (!decData) {
         // setIsLoading(false);
-
         return;
       }
 
