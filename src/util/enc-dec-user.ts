@@ -29,20 +29,20 @@ export const encryptData = async (name: string, data: any): Promise<void> => {
   }
 };
 
-export const decryptData = async (name: string): Promise<data> => {
+export const decryptData = async (name: string): Promise<string> => {
 
   const encrypted = await localStorage.getItem(name) as string;
 
   try {
-    console.log('encrypted srec', encrypted);
 
     const decrypted = await CryptoJS.AES.decrypt(
       encrypted,
       SECRET_KEY,
     ).toString(CryptoJS.enc.Utf8);
     console.log('decrypted', decrypted);
+    const data: string = JSON.parse(decrypted)
 
-    return JSON.parse(decrypted);
+    return data;
   } catch (error: any) {
     console.log('error from dec', error.message);
     return error;
