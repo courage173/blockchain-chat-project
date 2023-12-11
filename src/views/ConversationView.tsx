@@ -11,6 +11,7 @@ import ConversationSettingsView from './ConversationSettingsView';
 import { ContentTypeId } from '@xmtp/xmtp-js';
 import { ContentTypeReaction } from '@xmtp/content-type-reaction';
 import { useReadReceipts } from '../hooks/useReadReceipts';
+import useScrollToLast from '../hooks/useScrollToLast';
 
 const appearsInMessageList = (message: Message): boolean => {
   if (ContentTypeReaction.sameAs(message.contentType as ContentTypeId)) {
@@ -40,13 +41,7 @@ export default function ConversationView({
   //--------using ref to control the scrolling automatically to the bottom--------//
   const messagesEndRef = useRef<any>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages?.length]);
+  useScrollToLast(messages?.length, messagesEndRef);
 
   return (
     <div className='p-4 pb-20 pt-14 overflow-y-auto overflow-x-hidden h-screen bg-[url(https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png)]'>
@@ -101,6 +96,7 @@ export default function ConversationView({
         )}
       </div>
       <div ref={messagesEndRef} />
+
       <MessageComposerView conversation={conversation} />
     </div>
   );

@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState, useRef } from 'react';
 import { Message, MessageAttachment } from '../model/db';
 import { useAttachment } from '../hooks/useAttachment';
 import { shortAddress } from '../util/shortAddress';
@@ -12,6 +12,7 @@ import MessageRepliesView from './MessageRepliesView';
 import ReactionsView from './ReactionsView';
 import ReadReceiptView from './ReadReceiptView';
 import ReactTimeAgo from 'react-time-ago';
+import useScrollToLast from '../hooks/useScrollToLast';
 
 function ImageAttachmentContent({
   attachment,
@@ -106,6 +107,7 @@ export default function MessageCellView({
 }): ReactElement {
   const [showTime, setShowTime] = useState(false);
   const [count, setCount] = useState(1);
+  const ref = useRef<any>(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -119,6 +121,8 @@ export default function MessageCellView({
       setShowTime((prev) => !prev);
     }
   };
+
+  useScrollToLast(showTime, ref);
 
   return (
     <div
@@ -144,6 +148,8 @@ export default function MessageCellView({
         </span>
         <div className={`ml-2 text-${message.sentByMe ? 'left' : 'left'} pr-2`}>
           <MessageContent message={message} />
+          <div ref={ref} />
+
           <div className={`flex justify-${message.sentByMe ? 'end' : 'start'}`}>
             <span>
               <MessageRepliesView message={message} />
