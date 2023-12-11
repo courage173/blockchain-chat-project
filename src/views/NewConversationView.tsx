@@ -89,7 +89,7 @@ export default function NewConversationView({
               ref={addressInputRef}
               type='text'
               className='border p-2 w-full  rounded shadow-sm dark:bg-black'
-              placeholder='Enter user crypto address'
+              placeholder={`Enter user's crypto address`}
             ></input>
           </label>
           <label className='space-x-4 flex justify-between'>
