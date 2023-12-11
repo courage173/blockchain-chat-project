@@ -124,14 +124,6 @@ export default function MessageCellView({
 
   useScrollToLast(showTime, ref);
 
-  // const scrollToBottom = () => {
-  //   ref.current?.scrollIntoView({ behavior: 'smooth' });
-  // };
-
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, [showTime]);
-
   return (
     <div
       onClick={handleShowTime}

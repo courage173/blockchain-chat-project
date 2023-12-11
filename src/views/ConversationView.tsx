@@ -41,14 +41,6 @@ export default function ConversationView({
   //--------using ref to control the scrolling automatically to the bottom--------//
   const messagesEndRef = useRef<any>(null);
 
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  // };
-
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, [messages?.length]);
-
   useScrollToLast(messages?.length, messagesEndRef);
 
   return (
