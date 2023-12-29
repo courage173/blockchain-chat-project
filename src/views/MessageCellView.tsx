@@ -124,6 +124,8 @@ export default function MessageCellView({
 
   useScrollToLast(showTime, ref);
 
+  console.log('message load', message);
+
   return (
     <div
       onClick={handleShowTime}
@@ -146,11 +148,15 @@ export default function MessageCellView({
         >
           {shortAddress(message.senderAddress)}:
         </span>
-        <div className={`ml-2 text-${message.sentByMe ? 'left' : 'left'} pr-2`}>
+        <div className='ml-2 text-left pr-2'>
           <MessageContent message={message} />
           <div ref={ref} />
 
-          <div className={`flex justify-${message.sentByMe ? 'end' : 'start'}`}>
+          <div
+            className={`flex ${
+              message.sentByMe ? 'justify-end' : 'justify-start'
+            }`}
+          >
             <span>
               <MessageRepliesView message={message} />
             </span>

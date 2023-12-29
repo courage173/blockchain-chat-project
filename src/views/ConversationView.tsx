@@ -12,6 +12,7 @@ import { ContentTypeId } from '@xmtp/xmtp-js';
 import { ContentTypeReaction } from '@xmtp/content-type-reaction';
 import { useReadReceipts } from '../hooks/useReadReceipts';
 import useScrollToLast from '../hooks/useScrollToLast';
+import bgImage from '../assets/chat-background.png';
 
 const appearsInMessageList = (message: Message): boolean => {
   if (ContentTypeReaction.sameAs(message.contentType as ContentTypeId)) {
@@ -44,7 +45,10 @@ export default function ConversationView({
   useScrollToLast(messages?.length, messagesEndRef);
 
   return (
-    <div className='p-4 pb-20 pt-14 overflow-y-auto overflow-x-hidden h-screen bg-[url(https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png)]'>
+    <div
+      //image url https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png
+      className={`p-4 pb-20 pt-14 overflow-y-auto overflow-x-hidden h-screen bg-[url(assets/chat-background.png)]`}
+    >
       <Header>
         <div className='flex justify-between font-bold px-4 py-2'>
           <span className='flex-grow'>
