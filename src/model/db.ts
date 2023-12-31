@@ -7,6 +7,16 @@
 
 import Dexie from "dexie";
 
+export interface IUser {
+  _id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  isPrivate: boolean;
+  walletId: string;
+  conversation?: Conversation;
+}
+
 export interface Conversation {
   id?: number;
   topic: string;
@@ -14,6 +24,7 @@ export interface Conversation {
   createdAt: Date;
   updatedAt: Date;
   peerAddress: string;
+  latestMessage?: Message;
 }
 
 export interface Message {
@@ -23,6 +34,8 @@ export interface Message {
   xmtpID: string;
   senderAddress: string;
   sentByMe: boolean;
+  sendByUserName?: string;
+  recipientUserName?: string;
   sentAt: Date;
   contentType: {
     authorityId: string;

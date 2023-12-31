@@ -1,9 +1,6 @@
 import { ReactElement, useState } from "react";
 import "@rainbow-me/rainbowkit/styles.css";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-
 import LogInIcon from "../icons/login-svg-icon";
-import Chat_image from "../assets/chat-login.png";
 import { Input } from "../components/Input";
 import Button from "../components/Button";
 import { isValidEmail } from "../util/util";
@@ -13,57 +10,88 @@ import { useAPI } from "../hooks/useApi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
-export default function LoginView(): ReactElement {
+export default function RegisterView(): ReactElement {
   const { setNewUser } = useAuth();
 
   const [email, setEmail] = useState("courageosemwengie@gmail.com");
   const [password, setPassword] = useState("12345678");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("12345678");
 
   const navigate = useNavigate();
 
   const callAPI = useAPI();
-  const { mutate, isSuccess } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: () =>
-      callAPI(`/auth/login`, {
+      callAPI(`/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       }),
-    onSuccess: (data) => {
-      setNewUser(data as any);
-      navigate("/dashboard");
+    onSuccess: () => {
+      toast.error(`Successfully registered! sign in to continue`);
+      navigate("/login");
     },
     onError: (error: { message: string }) => {
       toast.error(`Error when signing in: ${error?.message}`);
     },
   });
 
-  const shouldSubmit = isValidEmail(email) && password.trim().length >= 6;
+  const shouldSubmit =
+    isValidEmail(email) &&
+    password.trim().length >= 6 &&
+    firstName.trim().length >= 3 &&
+    lastName.trim().length >= 3;
 
   return (
     // <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12">
     <div className="p-8 gap-5 lg:w-[95%] w-100 mx-auto flex items-center space-x-4 content-center h-screen justify-center">
       <div className=" sm:rounded-lg m-auto lg:max-h-1000 shadow shadow-blue-500 p-6 md:p-0">
-        <div className="px-2 py-5 sm:p-6 text-center">
-          <h1 className="font-semibold mb-5 text-4xl md:text-7xl text-blue-500 flex justify-center gap-3">
-            <span className="text-5xl md:text-7xl">
-              <LogInIcon />
-            </span>
-            <span>Login</span>
+        <div className="px-2 py-5 sm:p-12 text-center">
+          <h1 className="font-semibold mb-5 text-4xl md:text-4xl text-blue-500 flex justify-center gap-3">
+            <span>Register</span>
           </h1>
-          <div className="text-left">
+          <div className="text-left mb-[20px]">
+            <label className="text-sm text-[#fff]">First Name</label>
+            <Input
+              name="firstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-[350px]"
+              error={
+                firstName && firstName.length < 3
+                  ? "Firstname must be at least 3 characters"
+                  : ""
+              }
+            />
+          </div>
+          <div className="text-left mb-[20px]">
+            <label className="text-sm text-[#fff]">Last Name</label>
+            <Input
+              name="lastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-[300px]"
+              error={
+                lastName && lastName.length < 3
+                  ? "lastName must be at least 3 characters"
+                  : ""
+              }
+            />
+          </div>
+          <div className="text-left mb-[20px]">
             <label className="text-sm text-[#fff]">Email</label>
             <Input
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-[350px]"
+              className="w-[300px]"
               error={email && !isValidEmail(email) ? "Invalid email" : ""}
             />
           </div>
-          <div className="text-left mt-[20px]">
+          <div className="text-left mb-[20px]">
             <label className="text-sm text-[#fff]">Password</label>
             <Input
               className="w-[300px]"
@@ -79,7 +107,7 @@ export default function LoginView(): ReactElement {
             />
           </div>
           <Button
-            disabled={!shouldSubmit}
+            disabled={!shouldSubmit || isLoading}
             type="button"
             className="mt-[20px] w-full text-center"
             onClick={() => mutate()}
@@ -89,9 +117,9 @@ export default function LoginView(): ReactElement {
 
           <div className="mt-2 max-w-xl text-sm ">
             <p className="text-center text-xs">
-              Don't have an account?{" "}
-              <Link to="/signup" className="text-blue-500">
-                Sign up
+              Already have an account?{" "}
+              <Link to="/login" className="text-blue-500">
+                Sign in
               </Link>
             </p>
           </div>

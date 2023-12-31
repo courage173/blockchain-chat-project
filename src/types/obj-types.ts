@@ -1,25 +1,26 @@
 export interface localStorageFuncInterface {
-    name: string;
-    data: string;
+  name: string;
+  data: string;
 }
 
 export interface data {
-    data: string;
-    error: string;
+  data: string;
+  error: string;
 }
 
 export interface ProviderProps {
-    children: JSX.Element
+  children: JSX.Element;
 }
 
 export interface ChatFeatures {
-    id: number;
-    header: string;
-    paragraph: string;
-    icon: React.ReactElement
+  id: number;
+  header: string;
+  paragraph: string;
+  icon: React.ReactElement;
 }
 export interface ModalInterface {
-    children?: React.ReactElement;
-    show?: boolean;
-    setShow: (data: boolean) => void;
+  children?: React.ReactElement;
+  show?: boolean;
+  headerText: string;
+  setShow: (data: boolean) => void;
 }

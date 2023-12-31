@@ -1,10 +1,19 @@
-import ReactDom from 'react-dom';
-import { useEffect } from 'react';
-import { ModalInterface } from '../types/obj-types';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import ReactDom from "react-dom";
+import { useEffect } from "react";
+import { ModalInterface } from "../types/obj-types";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import Close from "../icons/Close";
 
-export default function Modal({ children, show }: ModalInterface) {
+export default function Modal({
+  children,
+  show,
+  headerText,
+  setShow,
+}: ModalInterface) {
+  const handleClickOutside = (e: any) => {
+    if (e.target.id === "modal") setShow(false);
+  };
   useEffect(() => {
     AOS.init();
   }, []);
@@ -38,15 +47,29 @@ export default function Modal({ children, show }: ModalInterface) {
   //             boxShadow: ' 15px 15px 50px  rgb(200, 123, 12)',
   //           }}
   //         ></Paper>
+
   return ReactDom.createPortal(
     <div
-      data-aos='zoom-in-up'
-      className='fixed top-0 bottom-0 left-0 right-0 z-20 bg-black/10 overflow-auto backdrop-filter backdrop-blur-sm'
+      id="modal"
+      onClick={handleClickOutside}
+      data-aos="zoom-in"
+      className="fixed top-0 bottom-0 left-0 right-0 z-20 bg-black/50 overflow-auto backdrop-filter "
     >
-      <div className='flex flex-col bg-white w-[80%] m-auto relative top-50 left-50 z-21 transform translate-x-50 translate-y-[35vh] p-2 shadow-2xl'>
-        {children}
+      <div className="flex flex-col bg-[rgba(32,33,35,1)] w-[80%] max-w-[680px] m-auto relative top-50 left-50 z-21 transform translate-x-50 translate-y-[35vh] p-2 shadow-2xl rounded">
+        <div className="px-4 pb-4 pt-5 sm:p-6 flex items-center justify-between border-b border-black/10 dark:border-white/10">
+          <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
+            {headerText}
+          </h3>
+          <button
+            onClick={() => setShow(false)}
+            className="ml-auto text-gray-500 transition hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          >
+            <Close />
+          </button>
+        </div>
+        <div className="p-4">{children}</div>
       </div>
     </div>,
-    document.getElementById('portal') as HTMLElement
+    document.getElementById("portal") as HTMLElement
   );
 }

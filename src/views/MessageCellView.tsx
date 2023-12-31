@@ -1,18 +1,18 @@
-import { ReactElement, useEffect, useState, useRef } from 'react';
-import { Message, MessageAttachment } from '../model/db';
-import { useAttachment } from '../hooks/useAttachment';
-import { shortAddress } from '../util/shortAddress';
-import { ContentTypeId, ContentTypeText } from '@xmtp/xmtp-js';
+import { ReactElement, useEffect, useState, useRef } from "react";
+import { Message, MessageAttachment } from "../model/db";
+import { useAttachment } from "../hooks/useAttachment";
+import { shortAddress } from "../util/shortAddress";
+import { ContentTypeId, ContentTypeText } from "@xmtp/xmtp-js";
 import {
   ContentTypeAttachment,
   ContentTypeRemoteAttachment,
-} from '@xmtp/content-type-remote-attachment';
-import { ContentTypeReply, Reply } from '@xmtp/content-type-reply';
-import MessageRepliesView from './MessageRepliesView';
-import ReactionsView from './ReactionsView';
-import ReadReceiptView from './ReadReceiptView';
-import ReactTimeAgo from 'react-time-ago';
-import useScrollToLast from '../hooks/useScrollToLast';
+} from "@xmtp/content-type-remote-attachment";
+import { ContentTypeReply, Reply } from "@xmtp/content-type-reply";
+import MessageRepliesView from "./MessageRepliesView";
+import ReactionsView from "./ReactionsView";
+import ReadReceiptView from "./ReadReceiptView";
+import ReactTimeAgo from "react-time-ago";
+import useScrollToLast from "../hooks/useScrollToLast";
 
 function ImageAttachmentContent({
   attachment,
@@ -28,9 +28,9 @@ function ImageAttachmentContent({
   return (
     <img
       onLoad={() => {
-        window.scroll({ top: 10000, behavior: 'smooth' });
+        window.scroll({ top: 10000, behavior: "smooth" });
       }}
-      className='rounded w-48'
+      className="rounded w-48"
       src={objectURL}
       title={attachment.filename}
     />
@@ -41,16 +41,16 @@ function AttachmentContent({ message }: { message: Message }): ReactElement {
   const attachment = useAttachment(message);
 
   if (!attachment) {
-    return <span className='text-zinc-500'>Loading attachment…</span>;
+    return <span className="text-zinc-500">Loading attachment…</span>;
   }
 
-  if (attachment.mimeType.startsWith('image/')) {
+  if (attachment.mimeType.startsWith("image/")) {
     return <ImageAttachmentContent attachment={attachment} />;
   }
 
   return (
     <span>
-      {attachment.mimeType} {attachment.filename || 'no filename?'}
+      {attachment.mimeType} {attachment.filename || "no filename?"}
     </span>
   );
 }
@@ -63,7 +63,7 @@ export function Content({
   contentType: ContentTypeId;
 }): ReactElement {
   if (ContentTypeText.sameAs(contentType)) {
-    return <span className='text-gray-500 text-left'>{content}</span>;
+    return <span className="text-gray-500 text-left">{content}</span>;
   }
 
   if (ContentTypeReply.sameAs(contentType)) {
@@ -72,7 +72,7 @@ export function Content({
   }
 
   return (
-    <span className='text-zinc-500 break-all'>
+    <span className="text-zinc-500 break-all">
       Unknown content: {JSON.stringify(content)}
     </span>
   );
@@ -101,9 +101,11 @@ export function MessageContent({
 export default function MessageCellView({
   message,
   readReceiptText,
+  activeChat,
 }: {
   message: Message;
   readReceiptText: string | undefined;
+  activeChat: { guest?: string; activeUser?: string } | undefined;
 }): ReactElement {
   const [showTime, setShowTime] = useState(false);
   const [count, setCount] = useState(1);
@@ -128,29 +130,34 @@ export default function MessageCellView({
     <div
       onClick={handleShowTime}
       className={`flex justify-${
-        message.sentByMe ? 'end' : 'start'
+        message.sentByMe ? "end" : "start"
       }  p-0.5 rounded-md my-2`}
     >
       <div
         className={`flex flex-col max-w-[75%] ${
-          message.sentByMe ? 'bg-green-100' : 'bg-blue-200'
+          message.sentByMe ? "bg-green-100" : "bg-blue-200"
         } rounded-md p-2`}
       >
-        <span
-          title={message.sentByMe ? 'You' : message.senderAddress}
+        {/* <span
+          title={message.sentByMe ? "You" : message.senderAddress}
           className={
             message.sentByMe
-              ? 'text-red-900 px-2 text-right'
-              : 'text-green-500 px-2 text-left'
+              ? "text-red-900 px-2 text-right"
+              : "text-green-500 px-2 text-left"
           }
         >
-          {shortAddress(message.senderAddress)}:
-        </span>
-        <div className={`ml-2 text-${message.sentByMe ? 'left' : 'left'} pr-2`}>
+          {activeChat
+            ? message.sentByMe
+              ? activeChat?.activeUser
+              : activeChat?.guest
+            : shortAddress(message.senderAddress)}
+          :
+        </span> */}
+        <div className={`ml-2 text-${message.sentByMe ? "left" : "left"} pr-2`}>
           <MessageContent message={message} />
           <div ref={ref} />
 
-          <div className={`flex justify-${message.sentByMe ? 'end' : 'start'}`}>
+          <div className={`flex justify-${message.sentByMe ? "end" : "start"}`}>
             <span>
               <MessageRepliesView message={message} />
             </span>
@@ -163,10 +170,10 @@ export default function MessageCellView({
         {showTime && (
           <div
             className={`flex justify-${
-              message.sentByMe ? 'end' : 'start'
+              message.sentByMe ? "end" : "start"
             } px-2 border-t-2 py-1`}
           >
-            <p className='text-xs'>
+            <p className="text-xs">
               <ReactTimeAgo date={message.sentAt} />
             </p>
           </div>

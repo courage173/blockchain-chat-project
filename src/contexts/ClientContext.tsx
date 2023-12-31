@@ -1,14 +1,14 @@
-import { Client } from '@xmtp/xmtp-js';
-import { Wallet } from 'ethers';
-import { createContext, useState, ReactElement, useEffect } from 'react';
+import { Client } from "@xmtp/xmtp-js";
+import { Wallet } from "ethers";
+import { createContext, useState, ReactElement, useEffect } from "react";
 import {
   AttachmentCodec,
   RemoteAttachmentCodec,
-} from '@xmtp/content-type-remote-attachment';
-import { ReplyCodec } from '@xmtp/content-type-reply';
-import { ReactionCodec } from '@xmtp/content-type-reaction';
-import { ReadReceiptCodec } from '@xmtp/content-type-read-receipt';
-import { decryptData } from '../util/enc-dec-user';
+} from "@xmtp/content-type-remote-attachment";
+import { ReplyCodec } from "@xmtp/content-type-reply";
+import { ReactionCodec } from "@xmtp/content-type-reaction";
+import { ReadReceiptCodec } from "@xmtp/content-type-read-receipt";
+import { decryptData } from "../util/enc-dec-user";
 
 type ClientContextValue = {
   client: Client | null;
@@ -30,23 +30,19 @@ export default function ClientProvider({
   children: ReactElement;
 }): ReactElement {
   const [client, setClient] = useState<Client | null>(null);
-  // const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const decData: string = await decryptData(NAME_LOC);
+      const privateKey: string = await decryptData(NAME_LOC);
 
-      // const insecurePrivateKey = localStorage.getItem('_insecurePrivateKey');
-
-      if (!decData) {
-        // setIsLoading(false);
+      if (!privateKey) {
         return;
       }
 
       try {
-        const wallet = new Wallet(decData);
+        const wallet = new Wallet(privateKey);
         const client = await Client.create(wallet, {
-          env: 'dev',
+          env: "dev",
         });
 
         client.registerCodec(new AttachmentCodec());
@@ -57,7 +53,7 @@ export default function ClientProvider({
 
         setClient(client);
       } catch (error: any) {
-        console.log('error', error.message);
+        console.log("error", error.message);
       }
     })();
   }, []);
@@ -69,12 +65,6 @@ export default function ClientProvider({
 
   return (
     <ClientContext.Provider value={clientContextValue}>
-      {/* {isLoading ? (
-        <div className='w-full p-4 m-auto'>Loading client....</div>
-      ) : (
-        children
-      )} */}
-
       {children}
     </ClientContext.Provider>
   );

@@ -19,5 +19,5 @@ export function useMessages(conversation: Conversation): Message[] | undefined {
         inReplyToID: "",
       })
       .sortBy("sentAt");
-  });
+  }, [conversation.topic]);
 }

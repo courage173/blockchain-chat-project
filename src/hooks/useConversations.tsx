@@ -29,7 +29,7 @@ export function useConversations(client: XMTP.Client | null): Conversation[] {
         })();
       }
     })();
-  }, []);
+  }, [client]);
 
   useEffect(() => {
     (async () => {
@@ -39,7 +39,7 @@ export function useConversations(client: XMTP.Client | null): Conversation[] {
         await saveConversation(conversation);
       }
     })();
-  }, []);
+  }, [client]);
 
   return (
     useLiveQuery(async () => {

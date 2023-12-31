@@ -26,7 +26,7 @@ export default function Button({
     <button
       disabled={disabled}
       type={type}
-      className={`${buttonColor} ${buttonSize} rounded-md inline-flex items-center font-semibold text-white shadow-sm ${className}`}
+      className={`${buttonColor} ${buttonSize} rounded items-center font-semibold text-white shadow-sm ${className}`}
       onClick={onClick}
     >
       {children}

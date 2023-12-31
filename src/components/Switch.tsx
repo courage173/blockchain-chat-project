@@ -1,0 +1,39 @@
+import React from "react";
+
+const Switch = ({
+  isChecked,
+  setIsChecked,
+  disabled,
+}: {
+  isChecked: boolean;
+  disabled?: boolean;
+  setIsChecked: (val: boolean) => void;
+}) => {
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
+  return (
+    <>
+      <label className="flex cursor-pointer select-none items-center">
+        <div className="relative">
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+            className="sr-only"
+            disabled={disabled}
+          />
+          <div className="block h-8 w-14 rounded-full bg-[#E5E7EB]"></div>
+          <div
+            className={`dot absolute left-1 top-1 h-6 w-6 rounded-full bg-white transition ${
+              isChecked ? "translate-x-full !bg-[#3758f9ff]" : ""
+            }`}
+          ></div>
+        </div>
+      </label>
+    </>
+  );
+};
+
+export default Switch;

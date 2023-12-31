@@ -6,20 +6,21 @@ import {
   useCallback,
   useContext,
   useState,
-} from 'react';
-import Button from '../components/Button';
-import { useClient } from '../hooks/useClient';
-import { Conversation } from '../model/db';
-import { sendMessage } from '../model/messages';
-import { ContentTypeText } from '@xmtp/xmtp-js';
+  useRef,
+} from "react";
+import Button from "../components/Button";
+import { useClient } from "../hooks/useClient";
+import { Conversation } from "../model/db";
+import { sendMessage } from "../model/messages";
+import { ContentTypeText } from "@xmtp/xmtp-js";
 import {
   Attachment,
   ContentTypeAttachment,
-} from '@xmtp/content-type-remote-attachment';
-import AttachmentPreviewView from './AttachmentPreviewView';
-import { MessageContent } from './MessageCellView';
-import { shortAddress } from '../util/shortAddress';
-import { ContentTypeReply, Reply } from '@xmtp/content-type-reply';
+} from "@xmtp/content-type-remote-attachment";
+import AttachmentPreviewView from "./AttachmentPreviewView";
+import { MessageContent } from "./MessageCellView";
+import { shortAddress } from "../util/shortAddress";
+import { ContentTypeReply, Reply } from "@xmtp/content-type-reply";
 
 export default function MessageComposerView({
   conversation,
@@ -28,9 +29,11 @@ export default function MessageComposerView({
 }): ReactElement {
   const [loading, setLoading] = useState(false);
   const [attachment, setAttachment] = useState<Attachment | undefined>();
-  const [textInput, setTextInput] = useState('');
+  const [textInput, setTextInput] = useState("");
 
   const fileField = createRef<HTMLInputElement>();
+
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const client = useClient()!;
@@ -53,7 +56,7 @@ export default function MessageComposerView({
 
       // clear inputs
       setAttachment(undefined);
-      setTextInput('');
+      setTextInput("");
       setLoading(false);
     })();
   }
@@ -73,19 +76,53 @@ export default function MessageComposerView({
       data: new Uint8Array(arrayBuffer),
     });
 
-    window.scroll({ top: 10000, behavior: 'smooth' });
+    window.scroll({ top: 10000, behavior: "smooth" });
   }
 
+  const getHeightBasedOnNewLine = () => {
+    // Split the text input value based on newline characters
+    const lines = (textInput.match(/\n/g) || []).length;
+    // Count the number of lines
+    if (lines === 1) return 30;
+    return lines * 24 + 30;
+  };
+
+  const getHeight = () => {
+    // Get the actual width of the text area
+    const textAreaWidth = getWidthOfTextArea();
+
+    const letterCount = textInput.length;
+
+    const lineBreakCount = (textInput.match(/\n/g) || []).length;
+
+    const averageLetterWidth = 8;
+
+    const averageLineHeight = 24; // Adjust this value as needed
+
+    const estimatedHeight =
+      Math.ceil(
+        ((letterCount + lineBreakCount) * averageLetterWidth) / textAreaWidth
+      ) * averageLineHeight;
+
+    const minHeight = 30;
+
+    return Math.max(minHeight, estimatedHeight);
+  };
+
+  const getWidthOfTextArea = () => {
+    return inputRef.current ? inputRef.current.clientWidth : 500;
+  };
+
   return (
-    <div className='fixed left-0 right-0 bottom-0 p-4 bg-white dark:bg-zinc-900'>
+    <div className="absolute left-0 right-0 bottom-0 p-4 bg-[#252329]">
       <input
         ref={fileField}
-        type='file'
+        type="file"
         onChange={onChange}
-        style={{ position: 'absolute', marginLeft: '-10000px' }}
+        style={{ position: "absolute", marginLeft: "-10000px" }}
       />
-      <form className='flex space-x-2 items-end' onSubmit={onSubmit}>
-        <div className=' flex-grow border rounded dark:bg-black dark:border-zinc-700 p-2'>
+      <form className="flex space-x-2 items-end" onSubmit={onSubmit}>
+        <div className=" flex-grow border rounded-[10px] dark:bg-black dark:border-zinc-700 p-2">
           {attachment && (
             <AttachmentPreviewView
               attachment={attachment}
@@ -94,32 +131,35 @@ export default function MessageComposerView({
               }}
             />
           )}
-          <div className='flex space-x-2'>
+          <div className="flex space-x-2 items-center">
             <button
-              type='button'
-              className='bg-blue-500 w-8 h-8 text-white rounded-full'
+              type="button"
+              className="bg-blue-500 w-8 h-8 text-white rounded-full"
               onClick={() => fileField.current?.click()}
             >
               +
             </button>
             <textarea
               // type='text'
+              rows={1}
               placeholder={
-                attachment ? 'Press Send to send attachment' : 'Type a message'
+                attachment ? "Press Send to send attachment" : "Type a message"
               }
-              className='flex-grow outline-none dark:bg-black'
-              name='text'
-              autoComplete='off'
+              className="flex-grow outline-none dark:bg-black resize-none placeholder-center"
+              name="text"
+              autoComplete="off"
               disabled={!!attachment}
               value={textInput}
+              ref={inputRef}
               onChange={(e) => setTextInput(e.target.value)}
+              style={{
+                maxHeight: "200px",
+                height: Math.max(getHeight(), getHeightBasedOnNewLine()) + "px",
+              }}
             />
+            <Button type="submit">Send</Button>
           </div>
         </div>
-
-        <Button type='submit' className='mb-2'>
-          Send
-        </Button>
       </form>
     </div>
   );
