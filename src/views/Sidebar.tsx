@@ -35,7 +35,7 @@ const Sidebar = () => {
         <span>
           <Modal show={show} setShow={setShow} headerText="Start Private Chat">
             <div className="w-full">
-              <NewConversationView />
+              <NewConversationView setShow={setShow} />
             </div>
           </Modal>
         </span>

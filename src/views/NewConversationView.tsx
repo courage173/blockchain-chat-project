@@ -7,7 +7,11 @@ import { useClient } from "../hooks/useClient";
 import { ModalInterface } from "../types/obj-types";
 import { Input } from "../components/Input";
 
-export default function NewConversationView(): ReactElement {
+export default function NewConversationView({
+  setShow,
+}: {
+  setShow: (value: boolean) => void;
+}): ReactElement {
   const client = useClient()!;
 
   // We're using an uncontrolled component here because we don't need to update
@@ -46,6 +50,7 @@ export default function NewConversationView(): ReactElement {
     try {
       const conversation = await startConversation(client, address);
       navigate(`/c/${conversation.topic}`);
+      setShow(false);
     } catch (e) {
       setError(String(e));
     }

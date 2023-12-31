@@ -50,9 +50,8 @@ const ConnectWallet = () => {
 
         await encryptData(name, data);
 
-        if (!user?.isPrivate) {
-          mutate(wallet.address);
-        }
+        mutate(wallet.address);
+
         setClient(client);
         setIsLoading((prev) => !prev);
       }
