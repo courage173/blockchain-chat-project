@@ -32,6 +32,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/",
+    element: (
+      <WrappedComponent>
+        <App />
+      </WrappedComponent>
+    ),
+  },
+  {
     path: "signup",
     element: <RegisterView />,
   },
