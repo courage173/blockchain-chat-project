@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
-  "homepage": "https://xmtp.github.io/xmtp-react-playground",
+  "homepage": ".",
   "dependencies": {
     "@animxyz/core": "^0.6.6",
     "@animxyz/react": "^0.6.7",
