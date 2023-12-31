@@ -25,19 +25,11 @@ async function conversationLoader({ params }: any) {
 const router = createBrowserRouter([
   {
     path: "dashboard",
-    element: (
-      <WrappedComponent>
-        <App />
-      </WrappedComponent>
-    ),
+    element: <App />,
   },
   {
     path: "/",
-    element: (
-      <WrappedComponent>
-        <App />
-      </WrappedComponent>
-    ),
+    element: <App />,
   },
   {
     path: "signup",
@@ -45,30 +37,16 @@ const router = createBrowserRouter([
   },
   {
     path: "login",
-    element: (
-      <WrappedComponent>
-        <LoginView />
-      </WrappedComponent>
-    ),
+    element: <LoginView />,
   },
   {
     path: "c/:conversationTopic",
-    element: (
-      <WrappedComponent>
-        <DashboardLayout>
-          <ConversationViewWithLoader />
-        </DashboardLayout>
-      </WrappedComponent>
-    ),
+    element: <ConversationViewWithLoader />,
     loader: conversationLoader,
   },
   {
     path: "new",
-    element: (
-      <WrappedComponent>
-        <NewConversationView />
-      </WrappedComponent>
-    ),
+    element: <NewConversationView />,
   },
 ]);
 
@@ -78,11 +56,13 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ToasterProvider>
-        <ClientProvider>
-          <WalletContext>
-            <RouterProvider router={router} />
-          </WalletContext>
-        </ClientProvider>
+        <WrappedComponent>
+          <ClientProvider>
+            <WalletContext>
+              <RouterProvider router={router} />
+            </WalletContext>
+          </ClientProvider>
+        </WrappedComponent>
       </ToasterProvider>
     </QueryClientProvider>
   </React.StrictMode>

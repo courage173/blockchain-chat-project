@@ -37,6 +37,7 @@ const ConnectWallet = () => {
   async function generateWallet() {
     try {
       setIsLoading((prev) => !prev);
+
       const wallet = Wallet.createRandom();
 
       const client = await Client.create(wallet, {
@@ -45,7 +46,7 @@ const ConnectWallet = () => {
       if (wallet && client) {
         // Don't do this in real life.
         const data = wallet.privateKey;
-        const name = import.meta.env.VITE_APP_LOCNAME;
+        const name = user?.id + import.meta.env.VITE_APP_LOCNAME;
 
         await encryptData(name, data);
 

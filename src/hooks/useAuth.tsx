@@ -10,11 +10,11 @@ import React, {
 } from "react";
 import { useLocalStorage } from "react-use";
 import { checkStatus, prepareEndpoint } from "../util/util";
-import { useNavigate } from "react-router-dom";
 import { useAPI } from "./useApi";
 
 type IUser = {
   id?: string;
+  _id?: string;
   email?: string;
   isPrivate?: boolean;
   firstName?: string;
@@ -31,8 +31,8 @@ interface State {
   auth: any;
   isLoggedIn: boolean;
   pending: boolean;
-  signOut: () => void;
-  fetchUser: () => void;
+  signOut: (handleRedirect: () => void) => void;
+  fetchUser: (handleRedirect: () => void) => void;
   setNewUser: (response: IUser & { _id: string }) => void;
   user: IUser | undefined;
   activeChat: ActiveChat | undefined;
@@ -116,7 +116,7 @@ function useProvideAuth(): State {
     activeChat,
   });
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const callAPI = useAPI();
 
   const setNewUser = useCallback(
@@ -135,50 +135,56 @@ function useProvideAuth(): State {
     [setActiveChat]
   );
 
-  const fetchUser = useCallback(async () => {
-    if (state.pending) return;
-    try {
-      dispatch({ type: "FETCHING" });
-      const URL = `/auth/user/`;
+  const fetchUser = useCallback(
+    async (handleRedirect: () => void) => {
+      if (state.pending) return;
+      try {
+        dispatch({ type: "FETCHING" });
+        const URL = `/auth/user/`;
 
-      const response: any = await callAPI(URL);
-      dispatch({ type: "USER_FETCHED", payload: toUser(response) });
-      setUser(toUser(response));
-    } catch (e) {
-      // Logout the user nevertheless
-      dispatch({ type: "LOGGED_OUT" });
-      setUser({});
-      navigate("/login");
-    }
-  }, [state.pending, callAPI, setUser, navigate]);
+        const response: any = await callAPI(URL);
+        dispatch({ type: "USER_FETCHED", payload: toUser(response) });
+        setUser(toUser(response));
+      } catch (e) {
+        // Logout the user nevertheless
+        dispatch({ type: "LOGGED_OUT" });
+        setUser({});
+        handleRedirect();
+      }
+    },
+    [state.pending, callAPI, setUser]
+  );
 
-  const signOut = useCallback(async () => {
-    if (state.pending) return;
-    try {
-      dispatch({ type: "FETCHING" });
-      const URL = `/auth/logout/`;
+  const signOut = useCallback(
+    async (handleRedirect: () => void) => {
+      if (state.pending) return;
+      try {
+        dispatch({ type: "FETCHING" });
+        const URL = `/auth/logout/`;
 
-      const response = await fetch(prepareEndpoint(URL), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
-        credentials: "include",
-      });
+        const response = await fetch(prepareEndpoint(URL), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({}),
+          credentials: "include",
+        });
 
-      await checkStatus(response);
+        await checkStatus(response);
 
-      dispatch({ type: "LOGGED_OUT" });
-      setUser({});
-      navigate("/login");
-    } catch (e) {
-      // Logout the user nevertheless
-      dispatch({ type: "LOGGED_OUT" });
-      setUser({});
-      navigate("/login");
-    }
-  }, [state.pending, setUser, navigate]);
+        dispatch({ type: "LOGGED_OUT" });
+        setUser({});
+        return handleRedirect();
+      } catch (e) {
+        // Logout the user nevertheless
+        dispatch({ type: "LOGGED_OUT" });
+        setUser({});
+        return handleRedirect();
+      }
+    },
+    [state.pending, setUser]
+  );
 
   // Return the user object and auth methods
   return {

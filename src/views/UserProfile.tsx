@@ -3,8 +3,9 @@ import LogoutIcon from "../icons/logout-svg-icon";
 import { logoutEnc } from "../util/enc-dec-user";
 import { Toaster } from "../providers/toast-provider";
 import { useDisconnect } from "wagmi";
-import { useSetClient } from "../hooks/useClient";
+import { useClient, useSetClient } from "../hooks/useClient";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = ({
   show,
@@ -18,23 +19,30 @@ const UserProfile = ({
   const { disconnectAsync } = useDisconnect();
   const setClient = useSetClient();
 
-  const { signOut } = useAuth();
+  const navigator = useNavigate();
 
-  const loc_name = import.meta.env.VITE_APP_LOCNAME;
+  const handleRedirect = () => {
+    navigator("/login");
+  };
 
-  async function logout() {
+  const { signOut, user } = useAuth();
+
+  async function disconnect() {
     try {
       await disconnectAsync();
-      indexedDB.deleteDatabase("DB");
-      window.location.reload();
-      // localStorage.removeItem("_insecurePrivateKey");
-      logoutEnc(loc_name);
+      // indexedDB.deleteDatabase("DB");
+      //const loc_name = user?.id + import.meta.env.VITE_APP_LOCNAME;
+      //window.location.reload();
+      //logoutEnc(loc_name);
 
-      const instanceOfSetTimeOut = setTimeout(() => {
-        setClient(null);
-      }, 1000);
+      setClient(null);
+      signOut(handleRedirect);
 
-      clearTimeout(instanceOfSetTimeOut);
+      // const instanceOfSetTimeOut = setTimeout(() => {
+
+      // }, 1000);
+
+      // clearTimeout(instanceOfSetTimeOut);
     } catch (error: any) {
       Toaster.error(error.message);
     }
@@ -63,7 +71,9 @@ const UserProfile = ({
       </button>
       <div className="h-px dark:bg-white/10 bg-black/20"></div>
       <button
-        onClick={signOut}
+        onClick={async () => {
+          await disconnect();
+        }}
         className="w-full flex px-3 min-h-[44px] py-1 items-center gap-3 dark:text-white cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
       >
         <LogoutIcon /> Log out

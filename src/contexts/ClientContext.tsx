@@ -9,6 +9,7 @@ import { ReplyCodec } from "@xmtp/content-type-reply";
 import { ReactionCodec } from "@xmtp/content-type-reaction";
 import { ReadReceiptCodec } from "@xmtp/content-type-read-receipt";
 import { decryptData } from "../util/enc-dec-user";
+import { useAuth } from "../hooks/useAuth";
 
 type ClientContextValue = {
   client: Client | null;
@@ -30,10 +31,11 @@ export default function ClientProvider({
   children: ReactElement;
 }): ReactElement {
   const [client, setClient] = useState<Client | null>(null);
-
+  const { user } = useAuth();
+  //0xBE14c254FB074Feb1A3cA2D400eE61b7359Af47e
   useEffect(() => {
     (async () => {
-      const privateKey: string = await decryptData(NAME_LOC);
+      const privateKey: string = await decryptData(user?.id + NAME_LOC);
 
       if (!privateKey) {
         return;
