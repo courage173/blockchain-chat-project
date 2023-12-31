@@ -31,8 +31,8 @@ interface State {
   auth: any;
   isLoggedIn: boolean;
   pending: boolean;
-  signOut: (handleRedirect: () => void) => void;
-  fetchUser: (handleRedirect: () => void) => void;
+  signOut: (handleRedirect?: () => void) => void;
+  fetchUser: (handleRedirect?: () => void) => void;
   setNewUser: (response: IUser & { _id: string }) => void;
   user: IUser | undefined;
   activeChat: ActiveChat | undefined;
@@ -136,7 +136,7 @@ function useProvideAuth(): State {
   );
 
   const fetchUser = useCallback(
-    async (handleRedirect: () => void) => {
+    async (handleRedirect?: () => void) => {
       if (state.pending) return;
       try {
         dispatch({ type: "FETCHING" });
@@ -149,14 +149,14 @@ function useProvideAuth(): State {
         // Logout the user nevertheless
         dispatch({ type: "LOGGED_OUT" });
         setUser({});
-        handleRedirect();
+        handleRedirect && handleRedirect();
       }
     },
     [state.pending, callAPI, setUser]
   );
 
   const signOut = useCallback(
-    async (handleRedirect: () => void) => {
+    async (handleRedirect?: () => void) => {
       if (state.pending) return;
       try {
         dispatch({ type: "FETCHING" });
@@ -175,12 +175,12 @@ function useProvideAuth(): State {
 
         dispatch({ type: "LOGGED_OUT" });
         setUser({});
-        return handleRedirect();
+        handleRedirect && handleRedirect();
       } catch (e) {
         // Logout the user nevertheless
         dispatch({ type: "LOGGED_OUT" });
         setUser({});
-        return handleRedirect();
+        handleRedirect && handleRedirect();
       }
     },
     [state.pending, setUser]
