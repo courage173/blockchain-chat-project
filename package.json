@@ -10,7 +10,6 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
-  "homepage": ".",
   "dependencies": {
     "@animxyz/core": "^0.6.6",
     "@animxyz/react": "^0.6.7",
