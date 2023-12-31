@@ -23,7 +23,7 @@ const Sidebar = () => {
   const [showProfile, setShowProfile] = useState(false);
   const ref = useRef(null);
 
-  useClickOutside(ref, () => setShowProfile(false));
+  //useClickOutside(ref, () => setShowProfile(false));
 
   const handleClick = (value: boolean) => {
     setShowProfile(value);

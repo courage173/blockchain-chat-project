@@ -1,9 +1,7 @@
 import { ReactElement, useState } from "react";
 import "@rainbow-me/rainbowkit/styles.css";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import LogInIcon from "../icons/login-svg-icon";
-import Chat_image from "../assets/chat-login.png";
 import { Input } from "../components/Input";
 import Button from "../components/Button";
 import { isValidEmail } from "../util/util";
@@ -12,6 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useAPI } from "../hooks/useApi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import LoadingSVG from "../icons/Loading-svg-icon";
 
 export default function LoginView(): ReactElement {
   const { setNewUser } = useAuth();
@@ -22,7 +21,7 @@ export default function LoginView(): ReactElement {
   const navigate = useNavigate();
 
   const callAPI = useAPI();
-  const { mutate, isSuccess } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: () =>
       callAPI(`/auth/login`, {
         method: "POST",
@@ -32,7 +31,7 @@ export default function LoginView(): ReactElement {
         body: JSON.stringify({ email, password }),
       }),
     onSuccess: (data) => {
-      setNewUser(data as any);
+      setNewUser(data);
       navigate("/dashboard");
     },
     onError: (error: { message: string }) => {
@@ -84,7 +83,7 @@ export default function LoginView(): ReactElement {
             className="mt-[20px] w-full text-center"
             onClick={() => mutate()}
           >
-            <span>Login</span>
+            {isLoading ? <LoadingSVG /> : <span>Login</span>}
           </Button>
 
           <div className="mt-2 max-w-xl text-sm ">

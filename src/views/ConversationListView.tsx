@@ -86,7 +86,7 @@ export default function ConversationListView(): ReactElement {
         user.conversation?.topic === params.conversationTopic ||
         user.topic === params.conversationTopic
     );
-    console.log(currentGuest, params.conversationTopic);
+
     if (!isEmpty(currentGuest)) {
       setActiveChatUsers({
         guest: currentGuest?.firstName + " " + currentGuest.lastName,
