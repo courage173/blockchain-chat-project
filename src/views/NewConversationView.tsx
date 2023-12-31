@@ -10,7 +10,7 @@ import { Input } from "../components/Input";
 export default function NewConversationView({
   setShow,
 }: {
-  setShow: (value: boolean) => void;
+  setShow?: (value: boolean) => void;
 }): ReactElement {
   const client = useClient()!;
 
@@ -50,7 +50,7 @@ export default function NewConversationView({
     try {
       const conversation = await startConversation(client, address);
       navigate(`/c/${conversation.topic}`);
-      setShow(false);
+      setShow && setShow(false);
     } catch (e) {
       setError(String(e));
     }
