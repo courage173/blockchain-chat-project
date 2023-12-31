@@ -11,6 +11,12 @@ import { ContentTypeReaction } from "@xmtp/content-type-reaction";
 import { useReadReceipts } from "../hooks/useReadReceipts";
 import useScrollToLast from "../hooks/useScrollToLast";
 import { useAuth } from "../hooks/useAuth";
+import { Link } from "react-router-dom";
+import Header from "../components/Header";
+import { Cog6ToothIcon } from "@heroicons/react/24/solid";
+import ConversationSettingsView from "./ConversationSettingsView";
+
+import bgImage from "../assets/chat-background.png";
 
 const appearsInMessageList = (message: Message): boolean => {
   if (ContentTypeReaction.sameAs(message.contentType as ContentTypeId)) {
@@ -41,7 +47,7 @@ export default function ConversationView({
 
   return (
     <div className="relative">
-      <div className="relative pt-14 overflow-y-auto overflow-x-hidden h-screen bg-[url(https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png)] pb-[100px]">
+      <div className="relative pt-14 overflow-y-auto overflow-x-hidden h-screen bg-[url(assets/chat-background.png)] pb-[100px]">
         <div className="px-4">
           {messages?.length == 0 && <p>No messages yet.</p>}
           {messages ? (
