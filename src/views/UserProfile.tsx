@@ -18,13 +18,14 @@ const UserProfile = ({
 }) => {
   const { disconnectAsync } = useDisconnect();
   const setClient = useSetClient();
+  const { setNewUser } = useAuth();
 
   const navigator = useNavigate();
 
   async function disconnect() {
     try {
       await disconnectAsync();
-      // indexedDB.deleteDatabase("DB");
+      indexedDB.deleteDatabase("DB");
       //const loc_name = user?.id + import.meta.env.VITE_APP_LOCNAME;
       //window.location.reload();
       //logoutEnc(loc_name);
@@ -32,6 +33,7 @@ const UserProfile = ({
       localStorage.removeItem("token");
       navigator("/login");
       setClient(null);
+      setNewUser({} as any);
 
       // const instanceOfSetTimeOut = setTimeout(() => {
 
