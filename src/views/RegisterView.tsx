@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useAPI } from "../hooks/useApi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import LoadingSVG from "../icons/Loading-svg-icon";
 
 export default function RegisterView(): ReactElement {
   const { setNewUser } = useAuth();
@@ -110,10 +111,10 @@ export default function RegisterView(): ReactElement {
           <Button
             disabled={!shouldSubmit || isLoading}
             type="button"
-            className="mt-[20px] w-full text-center h-[50px] md:h-[40px]"
+            className="mt-[20px] w-full text-center h-[50px] md:h-[40px] flex items-center justify-center"
             onClick={() => mutate()}
           >
-            <span>Sign up</span>
+            {isLoading ? <LoadingSVG /> : <span>Sign up</span>}
           </Button>
 
           <div className="mt-2 max-w-xl text-sm ">
