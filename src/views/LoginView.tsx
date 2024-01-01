@@ -31,6 +31,7 @@ export default function LoginView(): ReactElement {
         body: JSON.stringify({ email, password }),
       }),
     onSuccess: (data) => {
+      localStorage.setItem("token", data.token);
       setNewUser(data);
       navigate("/dashboard");
     },

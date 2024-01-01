@@ -21,13 +21,6 @@ const UserProfile = ({
 
   const navigator = useNavigate();
 
-  const handleRedirect = () => {
-    navigator("/login");
-    setClient(null);
-  };
-
-  const { signOut, user } = useAuth();
-
   async function disconnect() {
     try {
       await disconnectAsync();
@@ -36,7 +29,9 @@ const UserProfile = ({
       //window.location.reload();
       //logoutEnc(loc_name);
 
-      signOut(handleRedirect);
+      localStorage.removeItem("token");
+      navigator("/login");
+      setClient(null);
 
       // const instanceOfSetTimeOut = setTimeout(() => {
 

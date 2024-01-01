@@ -26,13 +26,17 @@ export const useAPI = () => {
 
   const callAPI = async (
     endpoint: string,
-    options: CallAPIOptions = {}
+    { headers, ...restOptions }: CallAPIOptions = {}
   ): Promise<any> => {
     let rawResponse: Response | undefined = undefined;
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(prepareEndpoint(endpoint), {
-        ...options,
-        credentials: "include",
+        ...restOptions,
+        headers: {
+          ...headers,
+          authorization: `Bearer ${token}`,
+        },
       });
       rawResponse = response;
 
