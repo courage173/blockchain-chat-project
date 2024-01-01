@@ -31,8 +31,8 @@ export const checkStatus = (response: any) => {
         // Receive JSON information about the error from the server
         if (Array.isArray(json.error)) {
           error.message = json.error[0].msg || json.error[0].message;
-        } else if (json.error && !Array.isArray(json.error)) {
-          error.message = json.error;
+        } else if (json.message && !Array.isArray(json.message)) {
+          error.message = json.message;
         } else if (json.message) {
           error.message = json.message;
         } else {

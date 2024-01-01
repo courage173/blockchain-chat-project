@@ -31,6 +31,7 @@ export default function RegisterView(): ReactElement {
       }),
     onSuccess: (data) => {
       toast.success(`Successfully registered! sign in to continue`);
+      localStorage.setItem("token", data.token);
       setNewUser(data);
       navigate("/dashboard");
     },
