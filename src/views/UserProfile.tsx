@@ -23,6 +23,7 @@ const UserProfile = ({
 
   const handleRedirect = () => {
     navigator("/login");
+    setClient(null);
   };
 
   const { signOut, user } = useAuth();
@@ -35,7 +36,6 @@ const UserProfile = ({
       //window.location.reload();
       //logoutEnc(loc_name);
 
-      setClient(null);
       signOut(handleRedirect);
 
       // const instanceOfSetTimeOut = setTimeout(() => {
