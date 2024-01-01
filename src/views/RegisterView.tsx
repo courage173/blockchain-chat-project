@@ -1,6 +1,5 @@
 import { ReactElement, useState } from "react";
 import "@rainbow-me/rainbowkit/styles.css";
-import LogInIcon from "../icons/login-svg-icon";
 import { Input } from "../components/Input";
 import Button from "../components/Button";
 import { isValidEmail } from "../util/util";
@@ -13,10 +12,10 @@ import { useAuth } from "../hooks/useAuth";
 export default function RegisterView(): ReactElement {
   const { setNewUser } = useAuth();
 
-  const [email, setEmail] = useState("courageosemwengie@gmail.com");
-  const [password, setPassword] = useState("12345678");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("12345678");
+  const [lastName, setLastName] = useState("");
 
   const navigate = useNavigate();
 
@@ -28,11 +27,12 @@ export default function RegisterView(): ReactElement {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, firstName, lastName, password }),
       }),
-    onSuccess: () => {
-      toast.error(`Successfully registered! sign in to continue`);
-      navigate("/login");
+    onSuccess: (data) => {
+      toast.success(`Successfully registered! sign in to continue`);
+      setNewUser(data);
+      navigate("/dashboard");
     },
     onError: (error: { message: string }) => {
       toast.error(`Error when signing in: ${error?.message}`);
@@ -41,14 +41,14 @@ export default function RegisterView(): ReactElement {
 
   const shouldSubmit =
     isValidEmail(email) &&
-    password.trim().length >= 6 &&
+    password.trim().length >= 8 &&
     firstName.trim().length >= 3 &&
     lastName.trim().length >= 3;
 
   return (
     // <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12">
     <div className="p-8 gap-5 lg:w-[95%] w-100 mx-auto flex items-center space-x-4 content-center h-screen justify-center">
-      <div className=" sm:rounded-lg m-auto lg:max-h-1000 shadow shadow-blue-500 p-6 md:p-0">
+      <div className="sm:rounded-lg m-auto lg:max-h-1000 shadow md:shadow-blue-500 md:p-6 md:p-0 w-full md:w-[unset]">
         <div className="px-2 py-5 sm:p-12 text-center">
           <h1 className="font-semibold mb-5 text-4xl md:text-4xl text-blue-500 flex justify-center gap-3">
             <span>Register</span>
@@ -99,8 +99,8 @@ export default function RegisterView(): ReactElement {
               name="password"
               value={password}
               error={
-                password && password.trim().length < 6
-                  ? "Password must be at least 6 characters!"
+                password && password.trim().length < 8
+                  ? "Password must be at least 8 characters!"
                   : ""
               }
               onChange={(e) => setPassword(e.target.value)}
@@ -109,14 +109,14 @@ export default function RegisterView(): ReactElement {
           <Button
             disabled={!shouldSubmit || isLoading}
             type="button"
-            className="mt-[20px] w-full text-center"
+            className="mt-[20px] w-full text-center h-[50px] md:h-[40px]"
             onClick={() => mutate()}
           >
-            <span>Login</span>
+            <span>Sign up</span>
           </Button>
 
           <div className="mt-2 max-w-xl text-sm ">
-            <p className="text-center text-xs">
+            <p className="text-center text-base md:text-xs">
               Already have an account?{" "}
               <Link to="/login" className="text-blue-500">
                 Sign in

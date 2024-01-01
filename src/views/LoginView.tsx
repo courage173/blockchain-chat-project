@@ -44,7 +44,7 @@ export default function LoginView(): ReactElement {
   return (
     // <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12">
     <div className="p-8 gap-5 lg:w-[95%] w-100 mx-auto flex items-center space-x-4 content-center h-screen justify-center">
-      <div className=" sm:rounded-lg m-auto lg:max-h-1000 shadow shadow-blue-500 p-6 md:p-0">
+      <div className=" sm:rounded-lg m-auto lg:max-h-1000 shadow md:shadow-blue-500 md:p-6 md:p-0 w-full md:w-[unset]">
         <div className="px-2 py-5 sm:p-6 text-center">
           <h1 className="font-semibold mb-5 text-4xl md:text-7xl text-blue-500 flex justify-center gap-3">
             <span className="text-5xl md:text-7xl">
@@ -58,7 +58,7 @@ export default function LoginView(): ReactElement {
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-[350px]"
+              className="w-[350px]  "
               error={email && !isValidEmail(email) ? "Invalid email" : ""}
             />
           </div>
@@ -80,14 +80,14 @@ export default function LoginView(): ReactElement {
           <Button
             disabled={!shouldSubmit}
             type="button"
-            className="mt-[20px] w-full text-center"
+            className="mt-[20px] w-full text-center flex items-center justify-center h-[50px] md:h-[40px]"
             onClick={() => mutate()}
           >
             {isLoading ? <LoadingSVG /> : <span>Login</span>}
           </Button>
 
-          <div className="mt-2 max-w-xl text-sm ">
-            <p className="text-center text-xs">
+          <div className="mt-2 max-w-xl text-sm">
+            <p className="text-center text-base md:text-xs">
               Don't have an account?{" "}
               <Link to="/signup" className="text-blue-500">
                 Sign up

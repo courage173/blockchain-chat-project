@@ -10,11 +10,15 @@ import { useAPI } from "../hooks/useApi";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
+import { useMedia } from "react-use";
+import { useNavigate, useNavigation } from "react-router-dom";
 
 const ConnectWallet = () => {
   const [isLoading, setIsLoading] = useState(false);
   const setClient = useSetClient();
   const { user } = useAuth();
+  const isMobile = useMedia("(max-width: 768px)");
+  const navigate = useNavigate();
 
   const callAPI = useAPI();
   const { mutate, isLoading: isSavingWalletId } = useMutation({
@@ -27,6 +31,10 @@ const ConnectWallet = () => {
         body: JSON.stringify({ walletId }),
       }),
     onSuccess: (data) => {
+      if (isMobile) {
+        navigate("/conversations");
+      }
+
       toast.success(`Successfully added wallet`);
     },
     onError: (error: { message: string }) => {
@@ -44,7 +52,6 @@ const ConnectWallet = () => {
         env: "dev",
       });
       if (wallet && client) {
-        // Don't do this in real life.
         const data = wallet.privateKey;
         const name = user?.id + import.meta.env.VITE_APP_LOCNAME;
 
@@ -63,11 +70,11 @@ const ConnectWallet = () => {
   }
   return (
     <div className="mt-5 flex flex-col space-x-4 column justify-center items-center h-[92vh]">
-      <div className="mt-5 flex flex-col space-x-4 column">
+      <div className="mt-5 flex flex-col space-x-4 column p-4">
         {/* <ConnectButton /> */}
         <p className="text-center">
-          Connect your wallet below or generate a randome wallet to <br />
-          start your secure messaging!
+          Connect your wallet below or generate a random <br />
+          wallet to start your secure messaging!
         </p>
         <ConnectButton.Custom>
           {({
@@ -102,7 +109,7 @@ const ConnectWallet = () => {
                 {(() => {
                   if (!connected) {
                     return (
-                      <div className="p-2 min-w-[500px]">
+                      <div className="md:min-w-[500px]">
                         <button
                           disabled={isLoading}
                           onClick={generateWallet}

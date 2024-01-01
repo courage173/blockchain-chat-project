@@ -16,6 +16,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import WrappedComponent from "./components/WrappedComponent.tsx";
 import DashboardLayout from "./views/DashboardLayout.tsx";
 import RegisterView from "./views/RegisterView.tsx";
+import ConversationListMobile from "./views/ConversationListMobile.tsx";
 
 async function conversationLoader({ params }: any) {
   const conversation = await findConversation(params.conversationTopic);
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/conversations",
+    element: <ConversationListMobile />,
   },
   {
     path: "signup",

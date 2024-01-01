@@ -13,7 +13,7 @@ import UserProfile from "./UserProfile";
 import ProfileDetailsModal from "./ProfileDetailsModal";
 import SettingsModal from "./SettingsModal";
 
-const Sidebar = () => {
+const Sidebar = ({ className }: { className?: string }) => {
   const { user } = useAuth();
 
   const [show, setShow] = useState(false);
@@ -30,7 +30,11 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="h-full w-[310px] fixed bg-[#0b090c] p-[20px]">
+    <div
+      className={`h-full w-[310px] fixed bg-[#0b090c] p-[20px] ${
+        className ? className : ""
+      }`}
+    >
       <div className="h-full w-full relative">
         <span>
           <Modal show={show} setShow={setShow} headerText="Start Private Chat">

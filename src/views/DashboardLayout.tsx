@@ -5,6 +5,8 @@ import { useClient } from "../hooks/useClient";
 import { useAuth } from "../hooks/useAuth";
 import CopyIcon from "../icons/copy-svg-icon";
 import { shortAddress } from "../util/shortAddress";
+import { Link } from "react-router-dom";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const { user, activeChat } = useAuth();
@@ -20,19 +22,25 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   }
   return (
     <>
-      <Sidebar />
-      <div className="h-screen  m-auto ml-[310px] bg-[#252329] relative">
+      <Sidebar className="hidden md:block" />
+      <div className="h-screen m-auto ml-0 md:ml-[310px] bg-[#252329] relative">
         <Header>
           <div className="flex justify-between w-200 h-100 p-4">
-            <div className="text-white flex">
-              <p className="pr-1 text-cyan-500">
+            <div className="text-white flex items-center">
+              <Link to="/conversations" className="mr-[20px] md:hidden flex">
+                <ArrowLeftIcon className="h-[15px]" />
+                Back
+              </Link>
+              <p className="pr-1 text-cyan-500 text-sm">
                 {activeChat?.guest ||
                   shortAddress(activeChat?.guestAddress || "")}
                 {/* {shortAddress(client.address)} */}
               </p>
               <button className="text-x flex tracking-wide" onClick={copy}>
                 <span className="px-1">
-                  {copied ? "Copied Wallet Address!" : "Copy Wallet Address"}
+                  {copied
+                    ? "Copied Wallet Address!"
+                    : "Copy Your Wallet Address"}
                 </span>
                 <span>
                   <CopyIcon />
