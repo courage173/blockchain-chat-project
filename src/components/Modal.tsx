@@ -57,7 +57,7 @@ export default function Modal({
     >
       <div className="flex flex-col bg-[rgba(32,33,35,1)] w-[80%] max-w-[680px] m-auto relative top-50 left-50 z-21 transform translate-x-50 translate-y-[35vh] p-2 shadow-2xl rounded">
         <div className="px-4 pb-4 pt-5 sm:p-6 flex items-center justify-between border-b border-black/10 border-white/10">
-          <h3 className="text-lg font-medium leading-6 text-gray-900 text-gray-200">
+          <h3 className="text-lg font-medium leading-6 text-gray-200">
             {headerText}
           </h3>
           <button
