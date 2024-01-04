@@ -56,13 +56,13 @@ export default function Modal({
       className="fixed top-0 bottom-0 left-0 right-0 z-20 bg-black/50 overflow-auto backdrop-filter "
     >
       <div className="flex flex-col bg-[rgba(32,33,35,1)] w-[80%] max-w-[680px] m-auto relative top-50 left-50 z-21 transform translate-x-50 translate-y-[35vh] p-2 shadow-2xl rounded">
-        <div className="px-4 pb-4 pt-5 sm:p-6 flex items-center justify-between border-b border-black/10 dark:border-white/10">
-          <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
+        <div className="px-4 pb-4 pt-5 sm:p-6 flex items-center justify-between border-b border-black/10 border-white/10">
+          <h3 className="text-lg font-medium leading-6 text-gray-900 text-gray-200">
             {headerText}
           </h3>
           <button
             onClick={() => setShow(false)}
-            className="ml-auto text-gray-500 transition hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="ml-auto text-gray-500 transition hover:text-gray-700 text-gray-400 hover:text-gray-200"
           >
             <Close />
           </button>

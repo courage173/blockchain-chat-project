@@ -1,7 +1,7 @@
 export default function CopyIcon() {
   return (
     <svg
-      className="w-4 h-4 text-black dark:text-white"
+      className="w-4 h-4 text-black text-white"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

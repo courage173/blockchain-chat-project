@@ -91,7 +91,7 @@ export default function NewConversationView({
               autoFocus
               onChange={(e) => setAddress(e.target.value)}
               type="text"
-              className="border p-2 w-full  rounded shadow-sm dark:bg-black"
+              className="border p-2 w-full  rounded shadow-sm bg-black"
               placeholder={`Enter user's crypto address`}
             />
           </label>

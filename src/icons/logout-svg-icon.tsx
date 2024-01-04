@@ -1,7 +1,7 @@
 export default function LogoutIcon() {
   return (
     <svg
-      className="w-6 h-4 text-black dark:text-white"
+      className="w-6 h-4 text-black text-white"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

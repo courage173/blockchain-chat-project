@@ -123,7 +123,7 @@ export default function MessageComposerView({
         style={{ position: "absolute", marginLeft: "-10000px" }}
       />
       <form className="flex space-x-2 items-end" onSubmit={onSubmit}>
-        <div className=" flex-grow border rounded-[10px] dark:bg-black dark:border-zinc-700 p-2">
+        <div className=" flex-grow border rounded-[10px] bg-black border-zinc-700 p-2">
           {attachment && (
             <AttachmentPreviewView
               attachment={attachment}
@@ -146,7 +146,7 @@ export default function MessageComposerView({
               placeholder={
                 attachment ? "Press Send to send attachment" : "Type a message"
               }
-              className="flex-grow outline-none dark:bg-black resize-none placeholder-center"
+              className="flex-grow outline-none bg-black resize-none placeholder-center"
               name="text"
               autoComplete="off"
               disabled={!!attachment}

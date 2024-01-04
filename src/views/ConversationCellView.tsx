@@ -22,10 +22,10 @@ export default function ConversationCellView({
     latestMessage?.content?.content?.contentType?.typeId === "text";
 
   return (
-    <div className="mt-2 p-2 border dark:border-zinc-600 rounded ß">
+    <div className="mt-2 p-2 border border-zinc-600 rounded ß">
       <div className="flex items-left justify-between space-x-2">
         <div className="hover:underline">
-          <span className="text-blue-700 dark:text-blue-500">
+          <span className="text-blue-700 text-blue-500">
             {conversation.title || shortAddress(conversation.peerAddress)}
           </span>{" "}
         </div>

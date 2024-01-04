@@ -1,7 +1,7 @@
 export default function LogInIcon() {
   return (
     <svg
-      className="w-[48px] h-[48px] md:w-[72px] md:h-[72px] text-blue-500 dark:text-white"
+      className="w-[48px] h-[48px] md:w-[72px] md:h-[72px] text-blue-500 text-white"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

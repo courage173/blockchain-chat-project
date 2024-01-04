@@ -54,7 +54,7 @@ const UserProfile = ({
         onClick={() => {
           setShowProfileModal();
         }}
-        className="w-full flex px-3 min-h-[44px] py-1 items-center gap-3 dark:text-white cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+        className="w-full flex px-3 min-h-[44px] py-1 items-center gap-3 text-white cursor-pointer text-sm hover:bg-gray-100 hover:bg-gray-800"
       >
         Profile
       </button>
@@ -62,16 +62,16 @@ const UserProfile = ({
         onClick={() => {
           setSettingsModal();
         }}
-        className="w-full flex px-3 min-h-[44px] py-1 items-center gap-3 dark:text-white cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+        className="w-full flex px-3 min-h-[44px] py-1 items-center gap-3 text-white cursor-pointer text-sm hover:bg-gray-100 hover:bg-gray-800"
       >
         Settings
       </button>
-      <div className="h-px dark:bg-white/10 bg-black/20"></div>
+      <div className="h-px bg-white/10 bg-black/20"></div>
       <button
         onClick={async () => {
           await disconnect();
         }}
-        className="w-full flex px-3 min-h-[44px] py-1 items-center gap-3 dark:text-white cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+        className="w-full flex px-3 min-h-[44px] py-1 items-center gap-3 text-white cursor-pointer text-sm hover:bg-gray-100 hover:bg-gray-800"
       >
         <LogoutIcon /> Log out
       </button>
