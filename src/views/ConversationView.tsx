@@ -1,5 +1,5 @@
-import { ReactElement, useState, useRef } from "react";
-import { Conversation, Message } from "../model/db";
+import { ReactElement, useRef } from "react";
+import { Message } from "../model/db";
 import { useMessages } from "../hooks/useMessages";
 import MessageComposerView from "./MessageComposerView";
 import MessageCellView from "./MessageCellView";
@@ -11,12 +11,7 @@ import { ContentTypeReaction } from "@xmtp/content-type-reaction";
 import { useReadReceipts } from "../hooks/useReadReceipts";
 import useScrollToLast from "../hooks/useScrollToLast";
 import { useAuth } from "../hooks/useAuth";
-import { Link } from "react-router-dom";
-import Header from "../components/Header";
-import { Cog6ToothIcon } from "@heroicons/react/24/solid";
-import ConversationSettingsView from "./ConversationSettingsView";
-
-import bgImage from "../assets/chat-background.png";
+import { useParams } from "react-router-dom";
 
 const appearsInMessageList = (message: Message): boolean => {
   if (ContentTypeReaction.sameAs(message.contentType as ContentTypeId)) {
@@ -26,20 +21,16 @@ const appearsInMessageList = (message: Message): boolean => {
   return true;
 };
 
-export default function ConversationView({
-  conversation,
-}: {
-  conversation: Conversation;
-}): ReactElement {
-  const liveConversation = useLiveConversation(conversation);
-  //console.log(liveConversation.topic, "liveConversation", conversation.topic);
+export default function ConversationView(): ReactElement {
+  const params = useParams();
+  const conversation = useLiveConversation(params?.conversationTopic || "");
 
   const messages = useMessages(conversation);
   const { activeChat } = useAuth();
 
   const showReadReceipt = useReadReceipts(conversation);
 
-  const [isShowingSettings, setIsShowingSettings] = useState(false);
+  // const [isShowingSettings, setIsShowingSettings] = useState(false);
 
   const messagesEndRef = useRef<any>(null);
 

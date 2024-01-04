@@ -126,8 +126,6 @@ export default function MessageCellView({
 
   useScrollToLast(showTime, ref);
 
-  console.log("message load", message);
-
   return (
     <div
       onClick={handleShowTime}

@@ -1,24 +1,45 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { encryptData } from "../util/enc-dec-user";
 import { Toaster } from "../providers/toast-provider";
 import { Wallet } from "ethers";
 import { Client } from "@xmtp/xmtp-js";
-import { useSetClient } from "../hooks/useClient";
+import { useClient, useSetClient } from "../hooks/useClient";
 import LoadingSVG from "../icons/Loading-svg-icon";
 import { useAPI } from "../hooks/useApi";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
 import { useMedia } from "react-use";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import LoaderSvg from "../icons/Loading-svg-icon";
 
 const ConnectWallet = () => {
+  const client = useClient();
   const [isLoading, setIsLoading] = useState(false);
   const setClient = useSetClient();
   const { user } = useAuth();
   const isMobile = useMedia("(max-width: 768px)");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (client && !loading) {
+      if (isMobile) {
+        navigate("/conversations");
+      } else {
+        navigate("/dashboard");
+      }
+    }
+  }, [client, isMobile, navigate, loading]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   const callAPI = useAPI();
   const { mutate, isLoading: isSavingWalletId } = useMutation({
@@ -30,9 +51,11 @@ const ConnectWallet = () => {
         },
         body: JSON.stringify({ walletId }),
       }),
-    onSuccess: (data) => {
+    onSuccess: () => {
       if (isMobile) {
         navigate("/conversations");
+      } else {
+        navigate("/dashboard");
       }
 
       toast.success(`Successfully added wallet`);
@@ -67,6 +90,14 @@ const ConnectWallet = () => {
       Toaster.error(e.message);
       console.error("error", e.message);
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoaderSvg />
+      </div>
+    );
   }
   return (
     <div className="mt-5 flex flex-col space-x-4 column justify-center items-center h-[92vh]">

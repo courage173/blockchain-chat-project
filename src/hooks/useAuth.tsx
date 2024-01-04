@@ -6,11 +6,14 @@ import React, {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useReducer,
 } from "react";
 import { useLocalStorage } from "react-use";
 import { checkStatus, prepareEndpoint } from "../util/util";
 import { useAPI } from "./useApi";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 type IUser = {
   id?: string;
@@ -31,8 +34,8 @@ interface State {
   auth: any;
   isLoggedIn: boolean;
   pending: boolean;
-  signOut: (handleRedirect?: () => void) => void;
-  fetchUser: (handleRedirect?: () => void) => void;
+  signOut: () => void;
+  fetchUser: () => void;
   setNewUser: (response: IUser & { _id: string }) => void;
   user: IUser | undefined;
   activeChat: ActiveChat | undefined;
@@ -116,7 +119,7 @@ function useProvideAuth(): State {
     activeChat,
   });
 
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const callAPI = useAPI();
 
   const setNewUser = useCallback(
@@ -135,62 +138,77 @@ function useProvideAuth(): State {
     [setActiveChat]
   );
 
-  const fetchUser = useCallback(
-    async (handleRedirect?: () => void) => {
-      if (state.pending) return;
-      try {
-        dispatch({ type: "FETCHING" });
-        const URL = `/auth/user/`;
-
-        const response: any = await callAPI(URL);
+  const { isLoading } = useQuery<IUser & { _id: string }>(
+    ["user"],
+    () => callAPI(`/auth/user/`),
+    {
+      staleTime: Infinity,
+      cacheTime: 0,
+      onSuccess: (response) => {
         dispatch({ type: "USER_FETCHED", payload: toUser(response) });
         setUser(toUser(response));
-      } catch (e) {
+      },
+      onError: () => {
         // Logout the user nevertheless
         dispatch({ type: "LOGGED_OUT" });
         setUser({});
-        handleRedirect && handleRedirect();
-      }
-    },
-    [state.pending, callAPI, setUser]
+        navigate("/login");
+      },
+    }
   );
 
-  const signOut = useCallback(
-    async (handleRedirect?: () => void) => {
-      if (state.pending) return;
-      try {
-        dispatch({ type: "FETCHING" });
-        const URL = `/auth/logout/`;
+  //  useEffect(() => {
+  //   if (state.pending) return;
 
-        const response = await fetch(prepareEndpoint(URL), {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({}),
-          credentials: "include",
-        });
+  //   try {
+  //     dispatch({ type: "FETCHING" });
+  //     const URL = `/auth/user/`;
 
-        await checkStatus(response);
+  //     const response: any =  callAPI(URL);
+  //     const {} = useQuery()
+  //     dispatch({ type: "USER_FETCHED", payload: toUser(response) });
+  //     setUser(toUser(response));
+  //   } catch (e) {
+  //     // Logout the user nevertheless
+  //     dispatch({ type: "LOGGED_OUT" });
+  //     setUser({});
+  //     navigate("/login");
+  //   }
+  // }, [state.pending, callAPI, setUser, navigate]);
 
-        dispatch({ type: "LOGGED_OUT" });
-        setUser({});
-        handleRedirect && handleRedirect();
-      } catch (e) {
-        // Logout the user nevertheless
-        dispatch({ type: "LOGGED_OUT" });
-        setUser({});
-        handleRedirect && handleRedirect();
-      }
-    },
-    [state.pending, setUser]
-  );
+  const signOut = useCallback(async () => {
+    if (state.pending) return;
+    try {
+      dispatch({ type: "FETCHING" });
+      const URL = `/auth/logout/`;
+
+      const response = await fetch(prepareEndpoint(URL), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+        credentials: "include",
+      });
+
+      await checkStatus(response);
+
+      dispatch({ type: "LOGGED_OUT" });
+      setUser({});
+      navigate("/login");
+    } catch (e) {
+      // Logout the user nevertheless
+      dispatch({ type: "LOGGED_OUT" });
+      setUser({});
+      navigate("/login");
+    }
+  }, [state.pending, setUser, navigate]);
 
   // Return the user object and auth methods
   return {
     ...state,
+    pending: isLoading,
     isLoggedIn: true,
-    fetchUser,
     signOut,
     setNewUser,
     setActiveChatUsers,

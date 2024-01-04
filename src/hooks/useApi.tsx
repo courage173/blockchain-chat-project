@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { toast } from "react-toastify";
 import { checkStatus, prepareEndpoint } from "../util/util";
 import { useAuth } from "./useAuth";
+import { useNavigate } from "react-router-dom";
 
 const onTokenInvalid = (signOut: () => void) => {
   signOut();
@@ -23,6 +24,7 @@ interface CallAPIOptions {
 
 export const useAPI = () => {
   const { signOut } = useAuth();
+  const navigator = useNavigate();
 
   const callAPI = async (
     endpoint: string,
@@ -46,8 +48,11 @@ export const useAPI = () => {
       if (typeof e === "object" && e !== null && "message" in e) {
         const error = e as { message: string };
         // If the token is invalid, sign the user out
-        if (error.message === "Unauthorized") {
-          return onTokenInvalid(signOut);
+
+        if (error.message === "INVALID_TOKEN") {
+          localStorage.removeItem("token");
+          navigator("/login");
+          return;
         }
       }
       throw new FetchError((e as Error).message, rawResponse);

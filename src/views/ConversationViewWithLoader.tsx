@@ -5,11 +5,9 @@ import { Conversation } from "../model/db";
 import DashboardLayout from "./DashboardLayout";
 
 export default function ConversationViewWithLoader(): ReactElement {
-  const { conversation } = useLoaderData() as { conversation: Conversation };
-
   return (
     <DashboardLayout>
-      <ConversationView conversation={conversation} />
+      <ConversationView />
     </DashboardLayout>
   );
 }

@@ -49,3 +49,8 @@ export const checkStatus = (response: any) => {
 
 export const prepareEndpoint = (endpoint: string) =>
   `${import.meta.env.VITE_PUBLIC_BACKEND_URL}${endpoint}`;
+
+export const getToken = () => {
+  const token = localStorage.getItem("token");
+  return token;
+};

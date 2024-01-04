@@ -7,6 +7,7 @@ import {
   useContext,
   useState,
   useRef,
+  useEffect,
 } from "react";
 import Button from "../components/Button";
 import { useClient } from "../hooks/useClient";

@@ -17,6 +17,7 @@ export function useReadReceipts(conversation: Conversation) {
     window.localStorage.getItem("readReceiptsEnabled") === "true";
 
   return useLiveQuery(async () => {
+    if (!conversation?.topic) return;
     try {
       const lastReadReceiptMessage = await db.readReceipts.get({
         peerAddress: conversation.peerAddress,

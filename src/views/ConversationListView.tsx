@@ -77,32 +77,19 @@ export default function ConversationListView(): ReactElement {
     });
   }, [conversations, publicUsers, latestMessages]);
 
-  useEffect(() => {
-    const currentGuest: any = [
-      ...publicConversations,
-      privateConversations,
-    ]?.find(
-      (user: any) =>
-        user.conversation?.topic === params.conversationTopic ||
-        user.topic === params.conversationTopic
-    );
-
+  const setActiveChat = (currentGuest: IUser) => {
     if (!isEmpty(currentGuest)) {
       setActiveChatUsers({
         guest: currentGuest?.firstName + " " + currentGuest.lastName,
         activeUser: user?.firstName,
-        guestAddress: currentGuest?.walletId || currentGuest?.peerAddress,
+        guestAddress:
+          currentGuest?.walletId || currentGuest?.conversation?.peerAddress,
       });
     }
-  }, [
-    publicConversations,
-    params.conversationTopic,
-    user?.firstName,
-    setActiveChatUsers,
-    privateConversations,
-  ]);
+  };
 
   async function handleConversation(user: IUser) {
+    setActiveChat(user);
     if (user.conversation?.topic) {
       navigate(`/c/${user.conversation.topic}`);
       return;
