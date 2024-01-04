@@ -28,7 +28,7 @@ const UserProfile = ({
       indexedDB.deleteDatabase("DB");
       //const loc_name = user?.id + import.meta.env.VITE_APP_LOCNAME;
       //window.location.reload();
-      //logoutEnc(loc_name);
+      //logoutEnc(loc_name)
 
       localStorage.removeItem("token");
       navigator("/login");
