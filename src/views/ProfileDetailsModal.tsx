@@ -7,6 +7,8 @@ import { useAPI } from "../hooks/useApi";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import LoadingSVG from "../icons/Loading-svg-icon";
+import { useClient } from "../hooks/useClient";
+import CopyIcon from "../icons/copy-svg-icon";
 
 const ProfileDetailsModal = ({
   show,
@@ -15,6 +17,8 @@ const ProfileDetailsModal = ({
   show: boolean;
   setShow: (val: boolean) => void;
 }) => {
+  const client = useClient() as any;
+  const [copied, setCopied] = useState(false);
   const { user, setNewUser } = useAuth();
   const [form, setForm] = useState<{
     firstName: string;
@@ -49,6 +53,13 @@ const ProfileDetailsModal = ({
     },
   });
 
+  function copy() {
+    navigator.clipboard.writeText(client.address);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  }
   const shouldUpdate =
     form.firstName?.trim().length > 3 &&
     form.lastName?.trim().length > 3 &&
@@ -91,6 +102,26 @@ const ProfileDetailsModal = ({
             className="w-[300px]"
             name="email"
             value={form.email}
+            disabled
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="mb-[10px] text-xs flex justify-between">
+            <span>Blockchain Wallet Address</span>{" "}
+            <button className="text-x flex tracking-wide" onClick={copy}>
+              <span className="px-1">
+                {copied ? "Copied Wallet Address!" : "Copy Your Wallet Address"}
+              </span>
+              <span>
+                <CopyIcon />
+              </span>
+            </button>
+          </label>
+          <Input
+            className="w-[300px]"
+            name="walletAddress"
+            value={user?.walletId || ""}
             disabled
             onChange={handleChange}
           />

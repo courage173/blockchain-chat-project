@@ -22,6 +22,7 @@ type IUser = {
   isPrivate?: boolean;
   firstName?: string;
   lastName?: string;
+  walletId?: string;
 };
 
 type ActiveChat = {
@@ -61,6 +62,7 @@ export const toUser = (data: IUser & { _id: string }) => {
     isPrivate: data.isPrivate,
     firstName: data.firstName,
     lastName: data.lastName,
+    walletId: data.walletId,
   };
 };
 

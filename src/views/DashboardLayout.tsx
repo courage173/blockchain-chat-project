@@ -7,19 +7,14 @@ import CopyIcon from "../icons/copy-svg-icon";
 import { shortAddress } from "../util/shortAddress";
 import { Link } from "react-router-dom";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import { useMedia } from "react-use";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const { user, activeChat } = useAuth();
   const client = useClient() as any;
   const [copied, setCopied] = useState(false);
+  const isMobile = useMedia("(max-width: 768px)");
 
-  function copy() {
-    navigator.clipboard.writeText(client.address);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  }
   return (
     <>
       <Sidebar className="hidden md:block" />
@@ -32,20 +27,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                 Back
               </Link>
               <p className="pr-1 text-cyan-500 text-sm">
-                {activeChat?.guest ||
-                  shortAddress(activeChat?.guestAddress || "")}
+                Guest ID:{" "}
+                {isMobile
+                  ? shortAddress(activeChat?.guestAddress || "")
+                  : activeChat?.guestAddress || ""}
                 {/* {shortAddress(client.address)} */}
               </p>
-              <button className="text-x flex tracking-wide" onClick={copy}>
-                <span className="px-1">
-                  {copied
-                    ? "Copied Wallet Address!"
-                    : "Copy Your Wallet Address"}
-                </span>
-                <span>
-                  <CopyIcon />
-                </span>
-              </button>
             </div>
           </div>
         </Header>
